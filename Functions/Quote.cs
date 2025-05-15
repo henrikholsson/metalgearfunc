@@ -29,8 +29,11 @@ public class Quote
         var input = context.GetInput<string>();
         var productAvailability = context.CallActivityAsync<string>(nameof(GetProductAvailability), 5);
         var total = context.CallActivityAsync<string>(nameof(GetTotal), 5);
+
+
         context.SetCustomStatus("Initiated quote process");
         var result = await Task.WhenAll(productAvailability, total);
+
         context.SetCustomStatus($"Retrieved quote data {productAvailability}, {total}");
         var requestQuoteResult = context.CallActivityAsync<string>(nameof(RequestQuoteAppproval), "request approval");
 
@@ -54,16 +57,12 @@ public class Quote
             context.SetCustomStatus("Approval timed out");
             return "Approval timed out.";
         }
-
-        //var approval = await context.WaitForExternalEvent<string>("ApprovalReceived");
-        //return $"Got approval: {approval}";
     }
 
     [Function(nameof(RequestQuoteAppproval))]
     public async Task<string> RequestQuoteAppproval([ActivityTrigger] string input)
     {
         await Task.Delay(1000);
-
         //sending email to sales representative
         return $"sent email to rep {input}";
     }
@@ -81,6 +80,7 @@ public class Quote
         await Task.Delay(1000);
         return $"GetTotal completed after 1 second.";
     }
+
 
     [Function(nameof(ApproveQuote))]
     public async Task<HttpResponseData> ApproveQuote(
