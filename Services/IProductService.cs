@@ -1,6 +1,6 @@
 
 using metalgear.Services.Models;
-
+namespace metalgear.Services;
 public interface IProductService
 {
     Task<IEnumerable<Product>> GetAllProductsAsync();

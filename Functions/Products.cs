@@ -2,8 +2,9 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using metalgear.Services;
 
-namespace metalgear
+namespace metalgear.Functions
 {
     public class Products
     {
@@ -16,8 +17,8 @@ namespace metalgear
             _productService = productService;
         }
 
-        [Function(nameof(RetrieveProducts))]
-        public async Task<IActionResult> RetrieveProducts([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "products")] HttpRequest req)
+        [Function(nameof(GetProducts))]
+        public async Task<IActionResult> GetProducts([HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = "products")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
             var products = await _productService.GetAllProductsAsync();
